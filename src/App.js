@@ -12,6 +12,7 @@ import Notification from "./pages/Notifications/Notification.jsx";
 import AdminAnalyticsPage from "./pages/Analytics/AdminAnalyticsPage.jsx";
 import TutorAnalyticsPage from "./pages/Analytics/TutorAnalyticsPage.jsx";
 import Main from './pages/Main/main.jsx';
+import Courses from './pages/Courses/Courses.jsx';
 
 function App() {
   const [sideBar,setsideBar]=useState(false)
@@ -27,6 +28,7 @@ function App() {
        <Route path="/profile" element={<Admin />} />
        <Route path="/admin/analytics" element={<AdminAnalyticsPage />} />
        <Route path="/tutor/analytics" element={<TutorAnalyticsPage />} />
+       <Route path="/courses" element={<Courses />} />
       </Routes>
     </BrowserRouter>
   );
