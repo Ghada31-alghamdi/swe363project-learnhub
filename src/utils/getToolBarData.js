@@ -1,6 +1,6 @@
 import { toolBarData } from "../data/toolBarData";
 import { toolBarData as toolBarData_student } from "../data/toolBarData_student";
-import { toolBarData as toolBarData_tutor } from "../data/toolBarData_Totre";
+import { toolBarData as toolBarData_tutor } from "../data/toolBarData_Tutor";
 
 /**
  * Get the appropriate toolbar data based on user type

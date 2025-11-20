@@ -23,6 +23,7 @@ import AdminApplySession from './pages/ApplySession/AdminApplySession.jsx';
 import MakeAnnouncement from './pages/Admin/MakeAnnouncement.jsx';
 import Support from './pages/Admin/Support.jsx';
 import SupportReply from './pages/Support/support_admin.jsx';
+import StudentSupport from './pages/Support/StudentSupport.jsx';
 import ViewApplications from './pages/Admin/ViewApplications.jsx';
 import TutorsList from './pages/Tutors/TutorsList.jsx';
 import GeneralCalendar from './pages/Calendar/GeneralCalendar.jsx';
@@ -58,6 +59,7 @@ function App() {
        <Route path="/admin/make-announcement" element={<MakeAnnouncement />} />
        <Route path="/admin/support" element={<Support />} />
        <Route path="/admin/support/reply" element={<SupportReply />} />
+       <Route path="/support" element={<StudentSupport />} />
        <Route path="/admin/view-applications" element={<ViewApplications />} />
        <Route path="/tutors-list" element={<TutorsList />} />
        <Route path="/general-calendar" element={<GeneralCalendar />} />
