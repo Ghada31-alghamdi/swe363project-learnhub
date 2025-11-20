@@ -13,12 +13,12 @@ export const toolBarData = [
   {
     title: "My profile",
     icon:<AccountCircleIcon/>,
-    link:"/profile"
+    link:"/tutor/profile"
   },
   {
     title: "Favorites",
     icon:<FavoriteBorderIcon/>,
-    link:"h"
+    link:"/favorites"
   },
   {
    title: "Calendar",
@@ -28,13 +28,13 @@ export const toolBarData = [
   {
    title: "Support",
     icon:<ContactSupportIcon/>,
-    link:"/profile"
+    link:"/support"
  
   },
     {
-   title: "Analysis",
+   title: "Analytics",
     icon:<AssessmentIcon/>,
-    link:"/profile"
+    link:"/tutor/analytics"
  
   },
   {
@@ -44,3 +44,4 @@ export const toolBarData = [
  
   },
 ];
+
