@@ -5,7 +5,7 @@ import BarChartIcon from "@mui/icons-material/BarChart";
 import HomeIcon from "@mui/icons-material/Home";
 import { getHomeRoute } from "../../utils/getHomeRoute";
 import ToolBar from "../../components/ToolBar";
-import { toolBarData as toolBarData_tutor } from "../../data/toolBarData_Totre";
+import { toolBarData as toolBarData_tutor } from "../../data/toolBarData_Tutor";
 
 export default function AnalyticsPage() {
   const [sideBar, setSideBar] = useState(false);

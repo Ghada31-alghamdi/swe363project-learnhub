@@ -7,7 +7,7 @@ import ToolBar from "../../components/ToolBar";
 import "../../index.css";
 import "../../Main_profiles.css";
 import SearchIcon from '@mui/icons-material/Search';
-import {toolBarData} from "../../data/toolBarData_student"
+import {toolBarData} from "../../data/toolBarData_Tutor";
 import { useNavigate } from "react-router-dom";
 
 

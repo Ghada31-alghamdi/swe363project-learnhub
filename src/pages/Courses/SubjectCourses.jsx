@@ -3,7 +3,7 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { useFavorites } from "../../data/state/useFavorites";
 import { courses } from "../../data/courses";
 import ToolBar from "../../components/ToolBar";
-import { toolBarData } from "../../data/toolBarData_student";
+import { getToolBarData } from "../../utils/getToolBarData";
 import SearchIcon from "@mui/icons-material/Search";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -67,7 +67,7 @@ export default function SubjectCourses() {
       <ToolBar
         openSideBar={clike_sideBr}
         sideBarState={sideBar}
-        toolBarData={toolBarData}
+        toolBarData={getToolBarData()}
       />
 
       <header className="subject-courses-header">

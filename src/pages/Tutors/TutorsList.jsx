@@ -5,7 +5,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import PersonIcon from '@mui/icons-material/Person';
 import SearchIcon from '@mui/icons-material/Search';
 import { Link } from "react-router-dom";
-import { toolBarData } from "../../data/toolBarData_student";
+import { getToolBarData } from "../../utils/getToolBarData";
 import { getHomeRoute } from "../../utils/getHomeRoute";
 import "./TutorsList.css";
 
@@ -106,7 +106,7 @@ export default function TutorsList() {
       <ToolBar
         openSideBar={toggleSideBar}
         sideBarState={sideBar}
-        toolBarData={toolBarData}
+        toolBarData={getToolBarData()}
       />
 
       <div className="tutors-list-header">
