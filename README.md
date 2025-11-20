@@ -34,10 +34,10 @@ Login Credentials:
 - Email: admin@kfupm.edu.sa
 - Password: admin123
   
-  Access:
-  - Approve and manage tutors
-  - Manage course listings
-  - Oversee all activities and ensure platform quality
+    Access:
+    - Approve and manage tutors
+    - Manage course listings
+    - Oversee all activities and ensure platform quality
 
 
 2. Tutor
@@ -45,21 +45,21 @@ Login Credentials:
     - Email: tutor@kfupm.edu.sa
     - Password: tutor123
       
-Access:
-- Create and manage tutoring sessions
-- Share learning materials and resources
-- Interact with students and answer course-related questions
+    Access:
+    - Create and manage tutoring sessions
+    - Share learning materials and resources
+    - Interact with students and answer course-related questions
   
 3. Student
     Login Credentials:
     - Email: student@kfupm.edu.sa
     - Password: student123
       
-Access:
-- Search for tutors by course
-- Join tutoring sessions
-- Rate and review tutors
-- Add tutors and courses to favorites for future sessions
+    Access:
+    - Search for tutors by course
+    - Join tutoring sessions
+    - Rate and review tutors
+    - Add tutors and courses to favorites for future sessions
 
 ## Team member names and roles.
 - Aleen Alqarni 
