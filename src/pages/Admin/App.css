@@ -412,7 +412,6 @@
   .support-list{ width:100%; padding:0 12px; }
 }
 
-/* يخلّي التول بار ثابت فوق بدون مسافة */
 .menu_icon {
   display: flex;
   align-items: center;
@@ -429,7 +428,6 @@
 }
 
 
-/* يمنع أي صفحة من إضافة padding فوق */
 .wrap, 
 .applications-page, 
 .mic-announcement, 
@@ -438,12 +436,12 @@
     margin-top: 0 !important;
 }
 
-/* يخلي التول بار يجي مباشرة فوق الصفحة */
+
 .toolBar {
     top: 0 !important;
 }
 
-/* يزيل أي مسافة بيضاء من البادي */
+
 body {
     margin-top: 0 !important;
     padding-top: 0 !important;
@@ -456,3 +454,194 @@ main,
   padding-top: 70px !important;
 }
 
+.edit-course-container {
+  width: 450px;
+  margin: 40px auto;
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+ 
+.course-title {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 25px;
+  color: #054727;
+  font-weight: bold;
+}
+ 
+.course-label {
+  display: block;
+  font-size: 16px;
+  margin-top: 15px;
+  margin-bottom: 5px;
+  color: #054727;
+  font-weight: bold;
+}
+ 
+.course-input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+}
+ 
+.course-textarea {
+  width: 100%;
+  height: 130px;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  margin-top: 10px;
+  font-size: 15px;
+}
+ 
+.course-save-btn {
+  margin-top: 25px;
+  width: 100%;
+  background: #054727;
+  color: white;
+  padding: 12px;
+  font-size: 17px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+}
+ 
+.course-save-btn:hover {
+  background: #04391f;
+}
+ 
+ 
+.edit-session-container {
+  width: 450px;
+  margin: 40px auto;
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+ 
+.page-title {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 25px;
+  color: #054727;
+  font-weight: bold;
+}
+ 
+.input-label {
+  display: block;
+  font-size: 16px;
+  margin-top: 15px;
+  margin-bottom: 5px;
+  color: #054727;
+  font-weight: bold;
+}
+ 
+.readonly-box {
+  background: #f3f3f3;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+}
+ 
+.input-field {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+}
+ 
+.date-time-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  margin-top: 15px;
+}
+ 
+.date-box, .time-box {
+  width: 50%;
+}
+ 
+.textarea {
+  width: 100%;
+  height: 120px;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  margin-top: 10px;
+  font-size: 15px;
+}
+ 
+.save-btn {
+  margin-top: 25px;
+  width: 100%;
+  background: #054727;
+  color: white;
+  padding: 12px;
+  font-size: 17px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+}
+ 
+.save-btn:hover {
+  background: #04391f;
+}
+ 
+ 
+ 
+.confirm-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+ 
+.confirm-box {
+  background: #56B46F;
+  padding: 25px;
+  border-radius: 12px;
+  width: 280px;
+  text-align: center;
+}
+ 
+.confirm-actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+ 
+.cancel-btn {
+  background: #DEFBDA;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  color: #0B6623;
+  cursor: pointer;
+  font-weight: bold;
+}
+ 
+.delete-btn {
+  background: #0B6623;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+}
+ 

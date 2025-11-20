@@ -1,16 +1,19 @@
 import React, { useMemo, useState } from "react";
 import { useFavorites } from "../../data/state/useFavorites";
+import { Link } from "react-router-dom";
 
 import SearchIcon from "@mui/icons-material/Search";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import CloseIcon from "@mui/icons-material/Close";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import HomeIcon from "@mui/icons-material/Home";
 
 import { courses } from "../../data/courses";
 import "./Courses.css";
 import ToolBar from "../../components/ToolBar";
-import {toolBarData} from "../../data/toolBarData_student"
+import { getToolBarData } from "../../utils/getToolBarData";
+import { getHomeRoute } from "../../utils/getHomeRoute";
 export default function Courses() {
     const clike_sideBr=()=>{
       setsideBar((prevState)=>!prevState)
@@ -46,7 +49,7 @@ export default function Courses() {
             <ToolBar
               openSideBar={clike_sideBr}
               sideBarState={sideBar}
-              toolBarData={toolBarData}
+              toolBarData={getToolBarData()}
               />
       <header className="coursesTop">
         <div />
@@ -120,6 +123,14 @@ export default function Courses() {
         {filtered.length === 0 && (
           <div className="emptyMsg">No courses match your search.</div>
         )}
+      </section>
+
+      <section className="unified-home-bottom-nav">
+        <button className="unified-home-btn">
+          <Link to={getHomeRoute()}>
+            <HomeIcon />
+          </Link>
+        </button>
       </section>
     </main>
   );

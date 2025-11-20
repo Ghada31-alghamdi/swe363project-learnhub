@@ -9,7 +9,7 @@ import HomeIcon from "@mui/icons-material/Home";
 import { courses } from "../../data/courses";
 import { useFavorites } from "../../data/state/useFavorites"; //
 import ToolBar from "../../components/ToolBar";
-import {toolBarData} from "../../data/toolBarData_student"
+import { getToolBarData } from "../../utils/getToolBarData";
 import { useState } from "react";
 import { getHomeRoute } from "../../utils/getHomeRoute";
 
@@ -45,7 +45,7 @@ export default function Favorites() {
       <ToolBar
         openSideBar={clike_sideBr}
         sideBarState={sideBar}
-        toolBarData={toolBarData}
+        toolBarData={getToolBarData()}
         />
       <header className="fav-top">
         <h2 className="fav-title"></h2>

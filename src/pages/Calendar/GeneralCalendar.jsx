@@ -1,12 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import ToolBar from "../../components/ToolBar";
-import { toolBarData } from "../../data/toolBarData_student";
+import { getToolBarData } from "../../utils/getToolBarData";
 import HomeIcon from "@mui/icons-material/Home";
 import PersonIcon from "@mui/icons-material/Person";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import CloseIcon from "@mui/icons-material/Close";
 import { getHomeRoute } from "../../utils/getHomeRoute";
 import "./GeneralCalendar.css";
 
@@ -61,11 +65,49 @@ const monthNames = [
 
 const dayNames = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
+// Available time slots
+const availableTimes = [
+  "6:00AM", "7:00AM", "8:00AM", "9:00AM", "10:00AM", "11:00AM",
+  "12:00PM", "1:00PM", "2:00PM", "3:00PM", "4:00PM", "5:00PM",
+  "6:00PM", "7:00PM", "8:00PM", "9:00PM", "10:00PM", "11:00PM"
+];
+
+const STORAGE_KEY = "tutor_sessions";
+
 export default function GeneralCalendar() {
   const [sideBar, setSideBar] = useState(false);
   const [currentDate, setCurrentDate] = useState(new Date(2021, 8, 19)); // September 2021
   const [selectedDate, setSelectedDate] = useState(19);
+  const [allSessions, setAllSessions] = useState(sampleSessions);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [editingSession, setEditingSession] = useState(null);
+  const [formData, setFormData] = useState({
+    time: "",
+    courseCode: "",
+    sessionDesc: ""
+  });
   const navigate = useNavigate();
+  const userType = localStorage.getItem('userType');
+  const currentTutorName = "Ahmad alghamdi"; // Default tutor name, can be fetched from profile
+
+  // Load sessions from localStorage on mount
+  useEffect(() => {
+    const savedSessions = localStorage.getItem(STORAGE_KEY);
+    if (savedSessions) {
+      try {
+        const parsed = JSON.parse(savedSessions);
+        setAllSessions([...sampleSessions, ...parsed]);
+      } catch (e) {
+        console.error("Error loading sessions:", e);
+      }
+    }
+  }, []);
+
+  // Save sessions to localStorage
+  const saveSessions = (sessions) => {
+    const tutorSessions = sessions.filter(s => s.createdBy === currentTutorName);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(tutorSessions));
+  };
 
   const click_sideBar = () => {
     setSideBar((prevState) => !prevState);
@@ -103,12 +145,94 @@ export default function GeneralCalendar() {
 
   // Get sessions for selected date
   const getSessionsForDate = () => {
-    return sampleSessions.filter(
+    return allSessions.filter(
       (session) =>
         parseInt(session.date) === selectedDate &&
         session.month === currentDate.getMonth() &&
         session.year === currentDate.getFullYear()
     );
+  };
+
+  // Get available times for selected date (exclude already booked times)
+  const getAvailableTimes = () => {
+    const sessionsForDate = getSessionsForDate();
+    const bookedTimes = sessionsForDate.map(s => s.time);
+    return availableTimes.filter(time => !bookedTimes.includes(time));
+  };
+
+  // Handle add session
+  const handleAddSession = () => {
+    setEditingSession(null);
+    setFormData({ time: "", courseCode: "", sessionDesc: "" });
+    setShowAddModal(true);
+  };
+
+  // Handle edit session
+  const handleEditSession = (session, e) => {
+    e.stopPropagation();
+    setEditingSession(session);
+    setFormData({
+      time: session.time,
+      courseCode: session.courseCode,
+      sessionDesc: session.sessionDesc
+    });
+    setShowAddModal(true);
+  };
+
+  // Handle delete session
+  const handleDeleteSession = (sessionId, e) => {
+    e.stopPropagation();
+    if (window.confirm("Are you sure you want to delete this session?")) {
+      const updatedSessions = allSessions.filter(s => s.id !== sessionId);
+      setAllSessions(updatedSessions);
+      saveSessions(updatedSessions);
+    }
+  };
+
+  // Handle form submit
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    if (!formData.time || !formData.courseCode || !formData.sessionDesc) {
+      alert("Please fill in all fields");
+      return;
+    }
+
+    if (editingSession) {
+      // Update existing session
+      const updatedSessions = allSessions.map(s => 
+        s.id === editingSession.id 
+          ? { ...s, ...formData }
+          : s
+      );
+      setAllSessions(updatedSessions);
+      saveSessions(updatedSessions);
+    } else {
+      // Add new session
+      const newSession = {
+        id: Date.now(),
+        tutorName: currentTutorName,
+        date: selectedDate.toString(),
+        month: currentDate.getMonth(),
+        year: currentDate.getFullYear(),
+        time: formData.time,
+        courseCode: formData.courseCode,
+        sessionDesc: formData.sessionDesc,
+        createdBy: currentTutorName
+      };
+      const updatedSessions = [...allSessions, newSession];
+      setAllSessions(updatedSessions);
+      saveSessions(updatedSessions);
+    }
+
+    setShowAddModal(false);
+    setFormData({ time: "", courseCode: "", sessionDesc: "" });
+    setEditingSession(null);
+  };
+
+  // Check if session belongs to current tutor
+  const isTutorSession = (session) => {
+    return session.createdBy === currentTutorName || 
+           (userType === 'tutor' && !session.createdBy && session.tutorName === currentTutorName);
   };
 
   // Generate calendar days
@@ -143,7 +267,7 @@ export default function GeneralCalendar() {
       <ToolBar
         openSideBar={click_sideBar}
         sideBarState={sideBar}
-        toolBarData={toolBarData}
+        toolBarData={getToolBarData()}
       />
 
       <header className="general-calendar-header">
@@ -194,6 +318,12 @@ export default function GeneralCalendar() {
       </section>
 
       <section className="calendar-sessions">
+        {userType === 'tutor' && (
+          <button className="calendar-add-session-btn" onClick={handleAddSession}>
+            <AddIcon />
+            <span>Add Session</span>
+          </button>
+        )}
         {sessionsForSelectedDate.length > 0 ? (
           sessionsForSelectedDate.map((session) => (
             <article 
@@ -215,6 +345,24 @@ export default function GeneralCalendar() {
                 <p className="calendar-session-course">{session.courseCode}</p>
                 <p className="calendar-session-desc">{session.sessionDesc}</p>
               </div>
+              {userType === 'tutor' && isTutorSession(session) && (
+                <div className="calendar-session-actions" onClick={(e) => e.stopPropagation()}>
+                  <button 
+                    className="calendar-edit-btn"
+                    onClick={(e) => handleEditSession(session, e)}
+                    title="Edit session"
+                  >
+                    <EditIcon />
+                  </button>
+                  <button 
+                    className="calendar-delete-btn"
+                    onClick={(e) => handleDeleteSession(session.id, e)}
+                    title="Delete session"
+                  >
+                    <DeleteIcon />
+                  </button>
+                </div>
+              )}
             </article>
           ))
         ) : (
@@ -223,6 +371,71 @@ export default function GeneralCalendar() {
           </div>
         )}
       </section>
+
+      {/* Add/Edit Session Modal */}
+      {showAddModal && (
+        <div className="calendar-modal-overlay" onClick={() => setShowAddModal(false)}>
+          <div className="calendar-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="calendar-modal-header">
+              <h3>{editingSession ? "Edit Session" : "Add New Session"}</h3>
+              <button className="calendar-modal-close" onClick={() => setShowAddModal(false)}>
+                <CloseIcon />
+              </button>
+            </div>
+            <form className="calendar-modal-form" onSubmit={handleFormSubmit}>
+              <div className="calendar-modal-field">
+                <label>Date</label>
+                <input 
+                  type="text" 
+                  value={`${selectedDate} ${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}`}
+                  disabled
+                />
+              </div>
+              <div className="calendar-modal-field">
+                <label>Time *</label>
+                <select 
+                  value={formData.time}
+                  onChange={(e) => setFormData({...formData, time: e.target.value})}
+                  required
+                >
+                  <option value="">Select time</option>
+                  {(editingSession ? availableTimes : getAvailableTimes()).map(time => (
+                    <option key={time} value={time}>{time}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="calendar-modal-field">
+                <label>Course Code *</label>
+                <input 
+                  type="text"
+                  value={formData.courseCode}
+                  onChange={(e) => setFormData({...formData, courseCode: e.target.value})}
+                  placeholder="e.g., Math 101"
+                  required
+                />
+              </div>
+              <div className="calendar-modal-field">
+                <label>Session Title/Description *</label>
+                <textarea
+                  value={formData.sessionDesc}
+                  onChange={(e) => setFormData({...formData, sessionDesc: e.target.value})}
+                  placeholder="e.g., Session: ch 2.4"
+                  rows="3"
+                  required
+                />
+              </div>
+              <div className="calendar-modal-actions">
+                <button type="button" className="calendar-modal-cancel" onClick={() => setShowAddModal(false)}>
+                  Cancel
+                </button>
+                <button type="submit" className="calendar-modal-submit">
+                  {editingSession ? "Update" : "Add"} Session
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       <section className="calendar-bottom-nav">
         <button className="calendar-more-btn" onClick={handleMoreClick}>

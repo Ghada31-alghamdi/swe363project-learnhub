@@ -8,7 +8,7 @@ import StarIcon from '@mui/icons-material/Star';
 import { Link } from "react-router-dom";
 import HomeIcon from '@mui/icons-material/Home';
 import { getHomeRoute } from "../../utils/getHomeRoute";
-import {toolBarData} from "../../data/toolBarData_Totre"
+import {toolBarData} from "../../data/toolBarData_Tutor";
 
 export default function Totor() {
   const clike_sideBr=()=>{
