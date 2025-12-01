@@ -39,7 +39,7 @@ async function seedAll() {
 		const users = [
 			{
 				name: "Khadijah Al-Safwan",
-				email: "Student_affairs@kfupm.edu.sa",
+				email: "student_affairs@kfupm.edu.sa",
 				passwordHash: bcrypt.hashSync("admin123", 10),
 				role: "admin",
 				employeeId: "202000001",

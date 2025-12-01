@@ -9,8 +9,11 @@ exports.handleLogin = async (req, res) => {
     return res.status(400).json({ message: "Email and password are required." });
 
     try {
-    // Check if user exists
-    const user = await User.findOne({ email: email.toLowerCase() });
+    // Check if user exists (case-insensitive search)
+    const normalizedEmail = email.toLowerCase().trim();
+    const user = await User.findOne({ 
+      email: { $regex: new RegExp(`^${normalizedEmail}$`, 'i') }
+    });
     if (!user)
       return res.status(401).json({ message: "Wrong credentials." });
 
