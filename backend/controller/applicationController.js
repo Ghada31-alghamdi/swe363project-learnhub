@@ -1,4 +1,4 @@
-const Application = require("../model/Application");
+const Application = require("../model/Applications");
 
 // viwe application for Admin 
 exports.getAllApplications = async (req, res) => {
