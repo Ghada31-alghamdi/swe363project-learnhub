@@ -142,13 +142,11 @@ export default function AdminHome() {
     setEditForm({ id: "", title: "", icon: null, time: "", totre: "" });
     alert("Session updated successfully");
   };
-
   const handleConfirmDeleteSession = () => {
     setSession(sessions.filter(s => s.id !== deletingSession.id));
     setDeletingSession(null);
     alert("Session deleted successfully");
   };
-
   const handleCancelSessionEdit = () => {
     setEditingSession(null);
     setEditForm({ id: "", title: "", icon: null, time: "", totre: "" });

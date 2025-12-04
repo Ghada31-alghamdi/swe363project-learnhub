@@ -17,6 +17,7 @@ const sampleTutorSessions = [
   { id: 5, tutorName: "Abdulaziz Alnufaie", date: "10 Oct", time: "8:00PM", courseCode: "Math 201", sessionDesc: "Session: ch 2.5" },
 ];
 
+
 export default function TutorsList() {
   const navigate = useNavigate();
   const [sideBar, setSideBar] = useState(false);

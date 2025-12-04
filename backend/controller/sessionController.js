@@ -19,6 +19,7 @@ async function createSession(req, res){
         const new_session = await Session.create({
             courseId: req.body.courseId,
             tutorId: req.body.tutorId,
+            tutorName:req.body.tutorName,
             description: req.body.description,
             title: req.body.title,
             dateTime: req.body.dateTime,
@@ -57,7 +58,7 @@ async function updateSession(req, res){
      if (!req?.body?._id){
       return [400, { message: "Session _id is required" }, null];
      }
-    if (!req?.body?.courseId || !req?.body?.tutorId || !req?.body?.title || !req?.body?.dateTime || !req.body.teamsLink) {
+    if (!req?.body?.courseId || !req?.body?.tutorId || !req?.body?.title || !req?.body?.dateTime || !req.body.teamsLink||!req?.body?.tutorName) {
         return [400, { "message": "tutorId,courseId,title,dateTime and teamsLink are required" }, null];}
     if (!mongoose.Types.ObjectId.isValid(req.body.courseId)) {
         return [400, { "message": "Course id is not valid." }, null];}
@@ -79,6 +80,7 @@ async function updateSession(req, res){
             session.dateTime=req.body.dateTime;
             session.teamsLink=req.body.teamsLink;
             session.status=req.body.status;
+            session.status=req.body.tutorName
         await session.save();
         console.log("Session updated");
         return [201,session, null];
