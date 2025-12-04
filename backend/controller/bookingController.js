@@ -1,4 +1,5 @@
 const Booking = require('../model/Booking');
+const mongoose = require('mongoose');
 
 // Create a booking (student and tutor)
 exports.createBooking = async (req, res) => {
@@ -35,21 +36,35 @@ exports.createBooking = async (req, res) => {
 };
 
 // Get bookings for current student or tutor
+
 exports.getStudentBookings = async (req, res) => {
   try {
-    const studentId = req.user.id;
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ message: 'Not authenticated' });
+    }
+
+    let studentId;
+    try {
+      studentId = new mongoose.Types.ObjectId(req.user.id);
+    } catch {
+      return res.status(400).json({ message: 'Invalid student ID' });
+    }
 
     const bookings = await Booking.find({ studentId })
-      .populate('sessionId')
+      .populate({ path: 'sessionId', select: 'name date', strictPopulate: false })
       .sort({ createdAt: -1 });
 
-    return res.json({ bookings });
+    if (!bookings.length) {
+      return res.json({ bookings: [], message: 'No bookings found' });
+    }
 
+    return res.json({ bookings });
   } catch (err) {
-    console.error(err);
+    console.error('Error in getStudentBookings:', err);
     return res.status(500).json({ message: 'Server error' });
   }
 };
+
 
 // Cancel a booking (student, tutor and admin)
 exports.cancelBooking = async (req, res) => {
