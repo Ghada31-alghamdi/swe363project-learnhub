@@ -22,6 +22,29 @@ export default function TutorApplySession() {
     setSideBar((prevState) => !prevState);
   };
 
+  // Get user role and navigate to appropriate tutor profile route
+  const handleViewTutor = () => {
+    const userType = localStorage.getItem('userType');
+    let route = '/student/tutorProfile';
+    
+    if (userType === 'admin') {
+      route = '/admin/tutorProfile';
+    } else if (userType === 'tutor') {
+      route = '/tutor/tutorProfile';
+    } else if (userType === 'student') {
+      route = '/student/tutorProfile';
+    }
+    
+    navigate(route, {
+      state: {
+        tutor: {
+          name: tutorName,
+          courseCode: courseCode
+        }
+      }
+    });
+  };
+
   const handleRegister = () => {
     navigate("/join-session", {
       state: {
@@ -64,14 +87,7 @@ export default function TutorApplySession() {
             fontSize: '12px',
             fontWeight: '500'
           }}
-          onClick={() => navigate("/tutor/favorite", {
-            state: {
-              tutor: {
-                name: tutorName,
-                courseCode: courseCode
-              }
-            }
-          })}
+          onClick={handleViewTutor}
         >
           View Tutor
         </button>

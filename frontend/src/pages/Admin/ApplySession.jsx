@@ -101,6 +101,29 @@ export default function AdminApplySession() {
     }
   };
 
+  // navigate to appropriate tutor profile route
+  const handleViewTutor = () => {
+    const userType = localStorage.getItem('userType');
+    let route = '/student/tutorProfile';
+    
+    if (userType === 'admin') {
+      route = '/admin/tutorProfile';
+    } else if (userType === 'tutor') {
+      route = '/tutor/tutorProfile';
+    } else if (userType === 'student') {
+      route = '/student/tutorProfile';
+    }
+    
+    navigate(route, {
+      state: {
+        tutor: {
+          name: sessionTutorName,
+          courseCode: sessionCourseCode
+        }
+      }
+    });
+  };
+
   return (
     <main className="admin-apply-wrap">
       {/* ToolBar with hamburger menu and notification */}
@@ -119,9 +142,22 @@ export default function AdminApplySession() {
       <section className="admin-apply-info">
         <h1 className="admin-apply-course-code">{sessionCourseCode}</h1>
         <h2 className="admin-apply-tutor-name">{sessionTutorName}</h2>
-        <Link to="/admin/profile" className="admin-apply-view-tutor">
+        <button
+          onClick={handleViewTutor}
+          className="admin-apply-view-tutor"
+          style={{ 
+            background: 'none', 
+            border: 'none', 
+            cursor: 'pointer', 
+            textDecoration: 'underline',
+            color: '#70b476',
+            fontSize: '12px',
+            fontWeight: '500',
+            padding: 0
+          }}
+        >
           View Tutor
-        </Link>
+        </button>
       </section>
 
       {/* Description Block */}
