@@ -93,6 +93,8 @@ useEffect(() => {
         const dt = new Date(s.dateTime);
         return {
           _id: s._id,
+          tutorId:s.tutorId,
+          courseId:s.courseId,
           tutorName: s.tutorName,
           date: String(dt.getDate()),
           month: dt.getMonth(),
@@ -104,6 +106,8 @@ useEffect(() => {
           }),
           courseCode: s.title, 
           sessionDesc: s.description,
+          teamsLink:s.teamsLink,
+          status:s.status
         };
       });
       setAllSessions(mapped);
@@ -225,24 +229,62 @@ useEffect(() => {
   const handleCancelDeleteSession = () => {
     setDeletingSession(null);
   };
+  //a function to reassaimble the time
+const buildDateTime = (year, month, day, timeStr) => {
+  let hour, minute;
+  const time = timeStr.trim().toUpperCase();
+  //here we are converting AM and PM
+  if (time.endsWith("AM") || time.endsWith("PM")) {
+    const hm = time.replace("AM", "").replace("PM", "").trim();
+    [hour, minute] = hm.split(":").map(Number);
+    if (time.endsWith("PM") && hour < 12) hour += 12;
+    if (time.endsWith("AM") && hour === 12) hour = 0;
+  } 
+  const date = new Date();
+  date.setFullYear(year);
+  date.setMonth(month); 
+  date.setDate(Number(day));
+  date.setHours(hour);
+  date.setMinutes(minute);
+  date.setSeconds(0);
+  date.setMilliseconds(0);
 
+  return date.toISOString();
+};
   // Handle form submit
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     if (!formData.time || !formData.courseCode || !formData.sessionDesc) {
       alert("Please fill in all fields");
       return;
     }
-
     if (editingSession) {
-      // Update existing session
-      const updatedSessions = allSessions.map(s => 
-        s.id === editingSession.id 
-          ? { ...s, ...formData }
-          : s
-      );
-      setAllSessions(updatedSessions);
-      saveSessions(updatedSessions);
+      // Update sessions for the loged in user
+      try{
+    const res = await fetch("http://localhost:5000/api/session/totur-edit-session", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      //here i reformated the data that was loded to the front end
+      //when we loadded them we had to splite the DateTime object and here we are reassampling it
+      body: JSON.stringify({ _id: editingSession._id,
+        courseId:editingSession.courseId,
+        tutorId:editingSession.tutorId,
+        tutorName:editingSession.tutorName,
+        title:formData.courseCode,
+        description:formData.sessionDesc,
+        dateTime:buildDateTime(editingSession.year,editingSession.month,editingSession.date,formData.time),
+        teamsLink:editingSession.teamsLink,
+        status:editingSession.status
+      }),
+    });
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(text || "Failed to edit session.");
+    }
+    }
+      catch(err){
+      console.error("Error edditing sessions:", err);
+      }
     } else {
       // Add new session
       const newSession = {
@@ -462,7 +504,7 @@ useEffect(() => {
                 </select>
               </div>
               <div className="calendar-modal-field">
-                <label>Course Code *</label>
+                <label>Session Title *</label>
                 <input 
                   type="text"
                   value={formData.courseCode}
