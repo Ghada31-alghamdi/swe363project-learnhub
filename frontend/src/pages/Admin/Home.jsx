@@ -146,25 +146,52 @@ export default function AdminHome() {
       totre: session.totre
     });
   };
-
   const handleDeleteSession = (session, e) => {
     e.stopPropagation();
     setDeletingSession(session);
   };
+  //becase the admin can only edit the time we need to combine it with the same date object
+  const buildDateTime = (oldDate, newtime) => {
+  const date = new Date(oldDate);
+  const [hours, minutes] = newtime.split(":");
+  date.setHours(Number(hours));
+  date.setMinutes(Number(minutes));
+  date.setSeconds(0);
+  date.setMilliseconds(0);
+  return date.toISOString();
+};
 
-  const handleSaveSessionEdit = () => {
-    if (!editForm.id.trim() || !editForm.time.trim() || !editForm.totre.trim()) {
+  const handleSaveSessionEdit = async () => {
+    try{
+    if (!editForm.title.trim() || !editForm.time.trim() || !editForm.totre.trim()) {
       alert("Please fill in all required fields.");
       return;
     }
-    setSession(sessions.map(s => 
-      s.id === editingSession.id 
-        ? { ...s, id: editForm.id, time: editForm.time, totre: editForm.totre }
-        : s
-    ));
+    const res = await fetch("http://localhost:5000/api/session/admin-edit-session", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ _id: editingSession._id,
+        courseId:editingSession.courseId,
+        tutorId:editingSession.tutorId,
+        tutorName:editForm.totre,
+        title:editForm.title,
+        description:editingSession.description,
+        dateTime:buildDateTime(editingSession.dateTime, editForm.time),
+        teamsLink:editingSession.teamsLink,
+        status:editingSession.status
+      }),
+    });
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(text || "Failed to edit session.");
+    }
     setEditingSession(null);
     setEditForm({ id: "", title: "", icon: null, time: "", totre: "" });
     alert("Session updated successfully");
+    }
+      catch(err){
+      console.error("Error edditing sessions:", err);
+      }
   };
   const handleConfirmDeleteSession = async () => {
     if(!deletingSession) return;
@@ -378,14 +405,14 @@ export default function AdminHome() {
               <h2 className="admin-edit-modal-title">Edit Session</h2>
               
               <div className="admin-edit-form-group">
-                <label className="admin-edit-form-label">Course Code</label>
+                <label className="admin-edit-form-label">Titel</label>
                 <input
                   type="text"
-                  name="id"
+                  name="title"
                   className="admin-edit-form-input"
-                  value={editForm.id}
+                  value={editForm.title}
                   onChange={handleInputChange}
-                  placeholder="e.g., SWE 353"
+                  placeholder="e.g., Software Engenering"
                 />
               </div>
 
@@ -409,7 +436,7 @@ export default function AdminHome() {
                   className="admin-edit-form-input"
                   value={editForm.totre}
                   onChange={handleInputChange}
-                  placeholder="e.g., By Mohamed alzhrane"
+                  placeholder="e.g., Mohamed alzhrane"
                 />
               </div>
 

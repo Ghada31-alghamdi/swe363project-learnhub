@@ -74,13 +74,13 @@ async function updateSession(req, res){
                 await touterNew.save();
             }
             session.courseId=req.body.courseId;
-            session.description=req.body.description;
             session.tutorId=req.body.tutorId
+            session.tutorName=req.body.tutorName;
             session.title=req.body.title;
+            session.description=req.body.description;
             session.dateTime=req.body.dateTime;
             session.teamsLink=req.body.teamsLink;
             session.status=req.body.status;
-            session.status=req.body.tutorName
         await session.save();
         console.log("Session updated");
         return [201,session, null];
