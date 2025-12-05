@@ -14,8 +14,9 @@ export default function TutorApplySession() {
   const location = useLocation();
   
   const session = location.state?.session || null;
-  const courseCode = session?.courseCode || session?.id || "MATH101";
-  const tutorName = session?.tutorName || session?.totre?.replace("By ", "") || "Ahmad Alghamdi";
+  // Extract course code
+  const courseCode = session?.courseId?.courseId || session?.courseCode || session?.id || "Course";
+  const tutorName = session?.tutorName || session?.totre?.replace("By ", "") || "Tutor";
   const description = session?.sessionDesc || session?.description || "Description";
 
   const click_sideBar = () => {
@@ -49,7 +50,9 @@ export default function TutorApplySession() {
     navigate("/join-session", {
       state: {
         session: {
+          _id: session?._id || session?.id,
           courseCode: courseCode,
+          courseId: session?.courseId, // Include courseId if available
           tutorName: tutorName,
           description: description,
           sessionDesc: description

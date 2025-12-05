@@ -22,6 +22,9 @@ export default function TutorProfileView() {
   const [loading, setLoading] = useState(true);
   const [isFavorited, setIsFavorited] = useState(false);
   const [favoriteTutors, setFavoriteTutors] = useState([]);
+  const [reviews, setReviews] = useState([]);
+  const [rating, setRating] = useState(0);
+  const [showAllReviews, setShowAllReviews] = useState(false);
   const userType = localStorage.getItem('userType');
   const isAdmin = userType === 'admin';
 
@@ -45,7 +48,6 @@ export default function TutorProfileView() {
           return;
         }
 
-        // Build query params - prioritize studentId, then tutorId, then name
         const params = new URLSearchParams();
         if (tutorStudentId) {
           params.append('studentId', tutorStudentId);
@@ -69,6 +71,32 @@ export default function TutorProfileView() {
         const data = await res.json();
         if (res.ok && data) {
           setTutor(data);
+          
+          // Fetch reviews for this tutor
+          if (data._id) {
+            try {
+              const reviewsRes = await fetch(`${API_BASE_URL}/reviews/tutor/${data._id}`, {
+                method: "GET",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
+                },
+              });
+
+              const reviewsData = await reviewsRes.json();
+              if (reviewsRes.ok && reviewsData.reviews) {
+                setReviews(reviewsData.reviews || []);
+                
+                // Calculate average rating from reviews
+                if (reviewsData.reviews.length > 0) {
+                  const avgRating = reviewsData.reviews.reduce((sum, rev) => sum + rev.rating, 0) / reviewsData.reviews.length;
+                  setRating(Math.round(avgRating * 10) / 10);
+                }
+              }
+            } catch (err) {
+              console.error("Error fetching tutor reviews:", err);
+            }
+          }
         }
       } catch (err) {
         console.error("Error fetching tutor profile:", err);
@@ -80,7 +108,6 @@ export default function TutorProfileView() {
     fetchTutorProfile();
   }, [tutorName, tutorStudentId]);
 
-  // Fetch favorites to check if tutor is favorited (only for non-admin users)
   useEffect(() => {
     if (isAdmin || !tutor) return;
 
@@ -243,16 +270,46 @@ export default function TutorProfileView() {
       </section>
       <section className="info">
         <div className="content">
-          <span className="rating"><p>4.5/5</p><StarIcon /></span>
+          <span className="rating"><p>{rating || 0}/5</p><StarIcon /></span>
           <p>FeedBacks</p>
-          <div className="info_box">
-            <span className="by"><PersonIcon /><p>Sarah</p></span>
-            <h6>The session was very helpful for me Thank you</h6>
-          </div>
-          <div className="info_box">
-            <span className="by"><PersonIcon /><p>Noor</p></span>
-            <h6>The session was good, but the voice is not clear</h6>
-          </div>
+          {reviews.length > 0 ? (
+            <>
+              {(showAllReviews ? reviews : reviews.slice(0, 3)).map((review, index) => (
+                <div key={review._id || index} className="info_box">
+                  <span className="by">
+                    <PersonIcon />
+                    <p>{review.studentId?.name || "Anonymous"}</p>
+                  </span>
+                  <h6>{review.comment || "No comment"}</h6>
+                </div>
+              ))}
+              {reviews.length > 3 && (
+                <button
+                  onClick={() => setShowAllReviews(!showAllReviews)}
+                  style={{
+                    marginTop: "12px",
+                    padding: "8px 16px",
+                    backgroundColor: "#56B46F",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "8px",
+                    cursor: "pointer",
+                    fontSize: "14px",
+                    fontWeight: "500",
+                    transition: "background-color 0.2s ease"
+                  }}
+                  onMouseEnter={(e) => e.target.style.backgroundColor = "#0B6623"}
+                  onMouseLeave={(e) => e.target.style.backgroundColor = "#56B46F"}
+                >
+                  {showAllReviews ? "Show Less" : `Show More (${reviews.length - 3} more)`}
+                </button>
+              )}
+            </>
+          ) : (
+            <div className="info_box">
+              <p>No feedback yet</p>
+            </div>
+          )}
         </div>
       </section>
       <section className="info">

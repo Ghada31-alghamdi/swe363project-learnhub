@@ -16,13 +16,12 @@ export default function AdminApplySession() {
 
   // Get session data from navigation state, or use defaults
   const session = location.state?.session || null;
-  // Handle both formats: from calendar (courseCode) or from sessions list (id)
-  const courseCode = session?.courseCode || session?.id || "MATH101";
-  // Handle both formats: from calendar (tutorName) or from sessions list (totre)
-  const tutorName = session?.tutorName || session?.totre?.replace("By ", "") || "Tutor1";
-  const description = session?.sessionDesc || session?.description || "Description";
+  // Extract course code
+  const courseCode = session?.courseId?.courseId || session?.courseCode || session?.id || "Course";
+  // Handle both formats
+  const tutorName = session?.tutorName || session?.totre?.replace("By ", "") || "Tutor";
+  const description = session?.sessionDesc || session?.description || session?.description || "Description";
   
-  // Editable state - these can be passed as props or fetched from state/API
   const [sessionCourseCode, setSessionCourseCode] = useState(courseCode);
   const [sessionTutorName, setSessionTutorName] = useState(tutorName);
   const [sessionDescription, setSessionDescription] = useState(description);
@@ -43,7 +42,9 @@ export default function AdminApplySession() {
     navigate("/join-session", {
       state: {
         session: {
+          _id: session?._id || session?.id,
           courseCode: sessionCourseCode,
+          courseId: session?.courseId, // Include courseId if available
           tutorName: sessionTutorName,
           description: sessionDescription,
           sessionDesc: sessionDescription
