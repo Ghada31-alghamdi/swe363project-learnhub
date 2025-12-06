@@ -117,7 +117,7 @@ useEffect(() => {
         };
       });
       setAllSessions(mapped);
-
+      // the same old code used to gropy the sessions but now i linked it to my real date (backend)
       if (mapped.length > 0) {
         const earliest = getEarliestSessionDate(mapped);
         setCurrentDate(earliest.date);
@@ -420,7 +420,7 @@ useEffect(() => {
         {sessionsForSelectedDate.length > 0 ? (
           sessionsForSelectedDate.map((session) => (
             <article 
-              key={session.id} 
+              key={session._id} 
               className="calendar-session-card"
               onClick={() => handleSessionClick(session)}
               style={{ cursor: 'pointer' }}
